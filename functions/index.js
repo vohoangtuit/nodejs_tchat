@@ -56,3 +56,5 @@ app.get('/api/getall', (req, res) => {//https://tchat-526d5.firebaseapp.com/api/
     });
   exports.app = functions.https.onRequest(app);
   // firebase serve --only functions,hosting
+
+  // todo: https://indepth.dev/building-an-api-with-firebase/
