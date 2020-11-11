@@ -11,4 +11,5 @@ app.get('/timestamp-cached',(request,response)=>{
 
 
 exports.app = functions.https.onRequest(app);
-// todo url on web : https://tchat-526d5.firebaseapp.com/timestamp
+//todo url on web : https://tchat-526d5.firebaseapp.com/timestamp
+
