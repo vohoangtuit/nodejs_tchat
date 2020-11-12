@@ -31,30 +31,31 @@ app.post('/api/create-user', (req, res) => {//https://tchat-526d5.firebaseapp.co
       })();
   });
   // read all
-app.get('/api/getall', (req, res) => {//https://tchat-526d5.firebaseapp.com/api/getall
+app.get('/api/users', (req, res) => {//https://tchat-526d5.firebaseapp.com/api/users
+    var allUsers = [];
     (async () => {
-        try {
-            let query = db.collection('users');
-            let response = [];
-            await query.get().then(querySnapshot => {
-                let docs = querySnapshot.docs;
-                for (let doc of docs) {
-                    const selectedItem = {
-                        id: doc.id,
-                        item: doc.data().item
-                    };
-                    response.push(selectedItem);
-                }
-                return response;
+        return admin.auth().listUsers()
+        .then(listUsersResult=> {
+            listUsersResult.users.forEach(userRecord=> {
+                // For each user
+                var userData = userRecord.toJSON();
+                allUsers.push(userData);
             });
-            return res.status(200).send(response);
-        } catch (error) {
-            console.log(error);
-            return res.status(500).send(error);
-        }
+           
+           // res.status(200).send({users:JSON.stringify(allUsers)});
+            res.status(200).send({success:true,users:allUsers});
+            return null;// add return when deploy to firebase
+        })
+        .catch(function (error) {
+            console.log("Error listing users:", error);
+            res.status(500).send(error);
+        });
+
         })();
     });
   exports.app = functions.https.onRequest(app);
-  // firebase serve --only functions,hosting
-
+  
+  
+  
+  // firebase serve --only functions,hosting : start server run postman local
   // todo: https://indepth.dev/building-an-api-with-firebase/
